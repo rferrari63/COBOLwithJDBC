@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.jdbc.examples</groupId>
+	<artifactId>jdbc-native-lib</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>jdbcdriver-native-lib</name>
+	<description>Project compiling jdbc driver natively and using it as a shared library</description>
+
+	<properties>
+		<java.version>11</java.version>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<postgresql-java-driver.version>42.2.15</postgresql-java-driver.version>
+		<graalvm.version>20.3.1</graalvm.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+    		<groupId>org.postgresql</groupId>
+    		<artifactId>postgresql</artifactId>
+    		<version>${postgresql-java-driver.version}</version>
+			<scope>provided</scope>			
+		</dependency>
+		<dependency>
+			<groupId>org.graalvm.sdk</groupId>
+			<artifactId>graal-sdk</artifactId>
+			<version>${graalvm.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.graalvm.nativeimage</groupId>
+			<artifactId>svm</artifactId>
+			<version>${graalvm.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.graalvm.nativeimage</groupId>
+				<artifactId>native-image-maven-plugin</artifactId>
+				<version>${graalvm.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>native-image</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<buildArgs>--no-fallback --language:js -H:-CheckToolchain -classpath /usr/share/java/postgresql-42.2.15.jar -H:+ReportExceptionStackTraces --initialize-at-build-time --enable-https -H:+JNI -H:CLibraryPath=${project.basedir}/src/main/c --shared -H:Name=libpsqljdbc</buildArgs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
