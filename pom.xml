@@ -55,7 +55,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<buildArgs>--no-fallback --language:js -H:-CheckToolchain -classpath /usr/share/java/postgresql-42.2.15.jar -H:+ReportExceptionStackTraces --initialize-at-build-time --enable-https -H:+JNI -H:CLibraryPath=${project.basedir}/src/main/c --shared -H:Name=libpsqljdbc</buildArgs>
+					<buildArgs>--no-fallback -H:-CheckToolchain -classpath /usr/share/java/postgresql-42.2.15.jar -H:+ReportExceptionStackTraces --initialize-at-build-time --enable-https -H:+JNI -H:CLibraryPath=${project.basedir}/src/main/c --shared -H:Name=libpsqljdbc</buildArgs>
 				</configuration>
 			</plugin>
 		</plugins>
